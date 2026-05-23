@@ -409,3 +409,115 @@
     transition: all 0.2s;
   }
   .change-btn:hover { background: #7b6fff15; }
+
+/* ── MODO CONCURSO ── */
+.btn-secondary {
+  margin-top: 10px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid #7b6fff55;
+}
+.btn-secondary:hover { background: #7b6fff15; opacity: 1; }
+
+.option.selected {
+  border-color: var(--accent);
+  background: #7b6fff20;
+  color: var(--text);
+}
+
+.contest-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.contest-nav .change-btn {
+  flex: 1;
+  padding: 10px;
+}
+.change-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.wide-change {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+}
+.answered-hint {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+.contest-loading { text-align: center; }
+
+.result-box {
+  background: #0a0a16;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 16px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.result-score {
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--green);
+  font-family: 'Space Mono', monospace;
+  margin-bottom: 8px;
+}
+.result-grade {
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.result-mini {
+  border-radius: 12px;
+  padding: 14px 8px;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  border: 1px solid var(--border);
+}
+.result-mini span {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.result-mini.ok { color: var(--green); background: #00e5b010; border-color: #00e5b025; }
+.result-mini.bad { color: var(--red); background: #ff446610; border-color: #ff446625; }
+
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  max-height: 62vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.review-card {
+  background: #0a0a16;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+.review-q {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.review-exp {
+  color: #aaa;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
