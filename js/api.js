@@ -85,11 +85,11 @@ Responda SOMENTE com JSON válido, sem markdown, sem texto extra:
 O campo "answer" é o índice 0-3 da opção correta.`;
 
   const json = await groqRequest({
-    model: 'llama-3.3-70b-versatile',
-    temperature: 0.85,
-    max_tokens: 500,
-    messages: [{ role: 'user', content: prompt }]
-  });
+  model: 'llama-3.3-70b-specdec', // ou 'llama-3.1-8b-instant'
+  temperature: 0.85,
+  max_tokens: 500,
+  messages: [{ role: 'user', content: prompt }]
+});
 
   const raw = json.choices?.[0]?.message?.content?.trim() || '';
   const clean = raw.replace(/```json|```/g, '').trim();
@@ -151,12 +151,12 @@ Responda SOMENTE com JSON válido, sem markdown e sem texto extra:
 }`;
 
   const json = await groqRequest({
-    model: 'llama-3.3-70b-versatile',
-    temperature: 0.7,
-    max_tokens: 3200,
-    messages: [{ role: 'user', content: prompt }]
-  });
-
+  const json = await groqRequest({
+  model: 'llama-3.3-70b-specdec', // ou 'llama-3.1-8b-instant'
+  temperature: 0.7,
+  max_tokens: 3200,
+  messages: [{ role: 'user', content: prompt }]
+});
   const raw = json.choices?.[0]?.message?.content?.trim() || '';
   const clean = raw.replace(/```json|```/g, '').trim();
 
