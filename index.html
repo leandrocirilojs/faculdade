@@ -1,110 +1,226 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz IA ∞</title>
-<link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz IA ∞</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+  
 </head>
 <body>
-<div id="app">
 
-  <!-- SETUP -->
-  <div class="setup-card" id="setup-screen">
-    <div class="setup-header">
-      <div class="setup-icon">🧠</div>
-      <div class="setup-title">Quiz IA ∞</div>
-      <p class="setup-sub">Cole qualquer conteúdo — resumo, PDF copiado, anotação de aula — e a IA gera perguntas infinitas sobre ele.</p>
+<div class="container">
+  
+  <!-- Form Inicial -->
+  <div id="setup-screen">
+    <div class="header">
+      <span class="emoji">🧠</span>
+      <h1>Quiz IA ∞</h1>
+      <p>Cole qualquer conteúdo — resumo, PDF copiado, anotação de aula — e a IA gera perguntas infinitas sobre ele.</p>
     </div>
 
-    <label class="setup-label">Seu conteúdo de estudo</label>
-    <textarea
-      class="content-area"
-      id="content-input"
-      placeholder="Cole aqui o conteúdo que você quer estudar...
+    <div class="form-group">
+      <div class="section-label">SEU CONTEÚDO DE ESTUDO</div>
+      <textarea id="study-content" placeholder="Cole seu texto aqui...">modelos de desenvolvimento de software, em especial o Modelo Cascata e o Modelo Espiral, além de suas principais fases e características.
 
-Exemplos:
-• Resumo de uma aula
-• Texto copiado de um PDF
-• Suas anotações
-• Qualquer tema: história, direito, biologia, programação..."
-      oninput="onContentChange()"
-    ></textarea>
-    <div class="char-count" id="char-count">0 caracteres</div>
-
-    <div class="preview-wrap hidden" id="preview-wrap">
-      <div class="preview-label">Tópicos detectados</div>
-      <div class="preview-pills" id="preview-pills"></div>
+Modelo Cascata: é caracterizado por uma abordagem linear e sequencial, com etapas como comunicação, planejamento, modelagem, construção, testes e entrega, sendo eficaz para projetos com requisitos bem definidos e estáveis.
+Comunicação: etapa inicial que envolve a interação com o cliente para coletar e documentar necessidades e requisitos do projeto.
+Planejamento: inclui a definição de recursos, cronogramas, custos e identificação de riscos, guiando as fases subsequentes.
+Modelo Espiral: estrutura-se em iterações (espirais), integrando definição de objetivos, análise de riscos, desenvolvimento e planejamento constante.</textarea>
+      <div class="char-count" id="char-count">0 caracteres</div>
     </div>
 
-    <label class="setup-label">Nível de dificuldade</label>
-    <div class="diff-row">
-      <button class="diff-btn active" id="diff-facil"   onclick="setDiff('facil')">😌 Fácil</button>
-      <button class="diff-btn"        id="diff-medio"   onclick="setDiff('medio')">🧠 Médio</button>
-      <button class="diff-btn"        id="diff-dificil" onclick="setDiff('dificil')">🔥 Difícil</button>
-    </div>
-
-    <label class="setup-label">Groq API Key</label>
-    <input class="setup-input" type="password" value="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" id="api-key-input" placeholder="gsk_...">
-    <p class="setup-hint">
-      Chave gratuita em <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a>.<br>
-      Fica só no seu navegador, nunca enviada a terceiros.
-    </p>
-
-    <button class="btn" onclick="startQuiz()">Gerar Quiz Infinito →</button>
-    <button class="btn btn-secondary" onclick="startContest()">Modo Concurso: 20 questões</button>
-  </div>
-
-  <!-- QUIZ -->
-  <div class="card hidden" id="quiz-screen">
-    <div class="top-bar">
-      <span class="label" id="quiz-title">QUIZ ∞</span>
-      <span class="score-badge" id="score-badge">⭐ 0 pts</span>
-    </div>
-
-    <div class="progress-wrap">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
-
-    <div class="streak-bar">
-      <span class="streak-label">STREAK</span>
-      <div class="streak-dots" id="streak-dots">
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        <div class="dot"></div><div class="dot"></div>
+    <div class="form-group">
+      <div class="section-label">TÓPICOS DETECTADOS</div>
+      <div class="tags-container" id="tags-container">
+        <span class="tag">Geral</span>
       </div>
-      <span class="diff-badge facil" id="diff-show">FÁCIL</span>
     </div>
 
-    <div id="question-area"></div>
-
-    <div class="footer-bar">
-      <span class="q-counter" id="q-counter">Pergunta #1</span>
-      <span class="stats-mini" id="stats-mini">0/0 ✓</span>
-      <button class="change-btn" onclick="goBack()">✎ trocar conteúdo</button>
+    <div class="form-group">
+      <div class="section-label">NÍVEL DE DIFICULDADE</div>
+      <div class="difficulty-grid">
+        <button class="btn-diff active" onclick="setDifficulty('Fácil', this)">😋 Fácil</button>
+        <button class="btn-diff" onclick="setDifficulty('Médio', this)">🧠 Médio</button>
+        <button class="btn-diff" onclick="setDifficulty('Difícil', this)">🔥 Difícil</button>
+      </div>
     </div>
+
+    <div class="form-group">
+      <div class="section-label">GROQ API KEY</div>
+      <input type="password" value="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" id="api-key" placeholder="gsk_...">
+      <div class="api-info">
+        Chave gratuita em <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a><br>
+        Fica só no seu navegador, nunca enviada a terceiros.
+      </div>
+    </div>
+
+    <button class="btn-main btn-primary" onclick="generateQuiz(1)">Gerar Quiz Infinito →</button>
+    <button class="btn-main btn-secondary" onclick="generateQuiz(20)">Modo Concurso: 20 questões</button>
   </div>
 
-  <!-- MODO CONCURSO -->
-  <div class="card hidden" id="contest-screen">
-    <div class="top-bar">
-      <span class="label" id="contest-title">MODO CONCURSO</span>
-      <span class="score-badge" id="contest-counter">20 questões</span>
-    </div>
+  <!-- Loading State -->
+  <div id="loading">Gerando pergunta com a IA da Groq...</div>
 
-    <div class="progress-wrap">
-      <div class="progress-bar" id="contest-progress"></div>
-    </div>
-
-    <div id="contest-body"></div>
+  <!-- Renderização do Quiz -->
+  <div id="quiz-screen">
+    <div id="quiz-container"></div>
+    <button class="btn-main btn-primary" onclick="nextQuestion()" id="next-btn" style="display:none;">Próxima Questão →</button>
+    <button class="btn-main btn-secondary" onclick="resetApp()" style="margin-top:10px;">Sair / Alterar Conteúdo</button>
   </div>
 
 </div>
-<script src="js/utils.js"></script>
-<script src="js/effects.js"></script>
-<script src="js/ui.js"></script>
-<script src="js/api.js"></script>
-<script src="js/app.js"></script>
-<script src="js/quiz.js"></script>
-<script src="js/contest.js"></script>
+
+<script>
+  let selectedDifficulty = 'Fácil';
+  let currentQuestions = [];
+  let currentIndex = 0;
+
+  const textarea = document.getElementById('study-content');
+  const charCount = document.getElementById('char-count');
+
+  // Atualizar contador de caracteres e extrair tópicos dinamicamente
+  textarea.addEventListener('input', () => {
+    const text = textarea.value;
+    charCount.innerText = `${text.length} caracteres`;
+    
+    // Tópicos simples extraídos de palavras maiores que 5 letras
+    if (text.length > 20) {
+      const words = text.split(/\s+/).filter(w => w.length > 5);
+      const unique = [...new Set(words)].slice(0, 5);
+      const tagsContainer = document.getElementById('tags-container');
+      tagsContainer.innerHTML = unique.map(w => `<span class="tag">${w.replace(/[^a-zA-ZáàâãéèêíóôõúçÁÀÂÃÉÈÍÓÔÕÚÇ]/g, '')}</span>`).join('');
+    }
+  });
+
+  function setDifficulty(level, btn) {
+    selectedDifficulty = level;
+    document.querySelectorAll('.btn-diff').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+ async function callGroqAPI(prompt, apiKey) {
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey.trim()}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'openai/gpt-oss-20b', // <-- MODELO ESTÁVEL E ATIVO
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.5,
+      response_format: { type: "json_object" }
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error?.message || 'Erro ao comunicar com a Groq API');
+  }
+
+  const data = await response.json();
+  return JSON.parse(data.choices[0].message.content);
+}
+
+  async function generateQuiz(quantity) {
+    const text = textarea.value.trim();
+    const apiKey = document.getElementById('api-key').value.trim();
+
+    if (!text) return alert('Por favor, insira o conteúdo para estudo.');
+    if (!apiKey) return alert('Insira sua Groq API Key.');
+
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+
+    const systemPrompt = `Você é um gerador de testes educacionais. 
+Com base no seguinte texto, gere exatamente ${quantity} questão(ões) no nível de dificuldade "${selectedDifficulty}".
+
+Retorne EXCLUSIVAMENTE um objeto JSON válido no seguinte formato exacto:
+{
+  "questions": [
+    {
+      "question": "Pergunta aqui",
+      "options": ["A) Opção 1", "B) Opção 2", "C) Opção 3", "D) Opção 4"],
+      "correct_index": 0,
+      "explanation": "Explicação detalhada da resposta correta."
+    }
+  ]
+}
+
+Texto base:
+${text}`;
+
+    try {
+      const result = await callGroqAPI(systemPrompt, apiKey);
+      currentQuestions = result.questions;
+      currentIndex = 0;
+      
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'block';
+      renderQuestion();
+    } catch (err) {
+      alert("Erro: " + err.message);
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('setup-screen').style.display = 'block';
+    }
+  }
+
+  function renderQuestion() {
+    const container = document.getElementById('quiz-container');
+    const q = currentQuestions[currentIndex];
+    
+    document.getElementById('next-btn').style.display = 'none';
+
+    container.innerHTML = `
+      <div class="question-box">
+        <div class="question-title"><strong>Questão ${currentIndex + 1}/${currentQuestions.length}:</strong> ${q.question}</div>
+        <div class="options">
+          ${q.options.map((opt, idx) => `
+            <button class="option-btn" onclick="checkAnswer(${idx})">${opt}</button>
+          `).join('')}
+        </div>
+        <div id="feedback" class="feedback"></div>
+      </div>
+    `;
+  }
+
+  function checkAnswer(selectedIndex) {
+    const q = currentQuestions[currentIndex];
+    const buttons = document.querySelectorAll('.option-btn');
+    const feedback = document.getElementById('feedback');
+
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      if (idx === q.correct_index) {
+        btn.classList.add('correct');
+      } else if (idx === selectedIndex) {
+        btn.classList.add('wrong');
+      }
+    });
+
+    if (selectedIndex === q.correct_index) {
+      feedback.innerHTML = `<span style="color: #25a260;">✨ Correto!</span> <br>${q.explanation}`;
+    } else {
+      feedback.innerHTML = `<span style="color: #a2252e;">❌ Incorreto.</span> <br>${q.explanation}`;
+    }
+
+    if (currentIndex < currentQuestions.length - 1) {
+      document.getElementById('next-btn').style.display = 'block';
+    }
+  }
+
+  function nextQuestion() {
+    currentIndex++;
+    renderQuestion();
+  }
+
+  function resetApp() {
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('setup-screen').style.display = 'block';
+  }
+</script>
+
 </body>
 </html>
