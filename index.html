@@ -1,79 +1,459 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz IA ∞</title>
-  <link rel="stylesheet" href="css/styles.css">
-
   
+  <!-- Fontes do Material Design / Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Web Components (Material Design 3) -->
+  <script type="module" src="https://esm.run/@material/web/all.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+  <style>
+    :root {
+      --md-sys-color-background: #0d1117;
+      --md-sys-color-surface: #161b22;
+      --md-sys-color-surface-variant: #21262d;
+      --md-sys-color-primary: #00d2ff;
+      --md-sys-color-on-primary: #003543;
+      --md-sys-color-outline: #30363d;
+      --md-sys-color-on-surface: #f0f6fc;
+      --md-sys-color-on-surface-variant: #8b949e;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: var(--md-sys-color-background);
+      color: var(--md-sys-color-on-surface);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background-color: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 20px;
+      padding: 28px;
+      width: 100%;
+      max-width: 580px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .brain-icon {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--md-sys-color-on-surface-variant);
+      text-transform: uppercase;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      height: 130px;
+      background: var(--md-sys-color-surface-variant);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px;
+      box-sizing: border-box;
+      font-family: inherit;
+      resize: vertical;
+      font-size: 0.9rem;
+    }
+
+    textarea:focus {
+      outline: 2px solid var(--md-sys-color-primary);
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #00d2ff;
+      margin-top: 4px;
+    }
+
+    /* Chips de Dificuldade */
+    .difficulty-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .diff-btn {
+      flex: 1;
+      padding: 10px;
+      background: var(--md-sys-color-surface-variant);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .diff-btn.selected {
+      border-color: #58a6ff;
+      background: rgba(88, 166, 255, 0.1);
+      box-shadow: 0 0 0 1px #58a6ff;
+    }
+
+    /* Card de status da IA */
+    .ai-card {
+      background: var(--md-sys-color-surface-variant);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ai-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ai-icon {
+      background: #1f293d;
+      color: #a5d6ff;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      color: #3fb950;
+      font-weight: bold;
+    }
+
+    .api-hint {
+      font-size: 0.75rem;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-top: 6px;
+    }
+
+    .api-hint a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    /* Botões Principais */
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn-primary {
+      background: #00d2ff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-secondary {
+      background: var(--md-sys-color-surface-variant);
+      color: #fff;
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 10px;
+      padding: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-row button {
+      flex: 1;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Tela de Pergunta */
+    .option-card {
+      background: var(--md-sys-color-surface-variant);
+      border: 1px solid var(--md-sys-color-outline);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .option-card:hover {
+      background: #30363d;
+    }
+
+    .option-card.correct { background: #238636 !important; border-color: #2ea043; }
+    .option-card.incorrect { background: #da3633 !important; border-color: #f85149; }
+  </style>
 </head>
 <body>
 
-<div class="container">
-  
-  <!-- Form Inicial -->
+<div class="card">
+  <!-- TELA DE CONFIGURAÇÃO -->
   <div id="setup-screen">
     <div class="header">
-      <span class="emoji">🧠</span>
-      <h1>Quiz IA ∞</h1>
-      <p>Cole qualquer conteúdo — resumo, PDF copiado, anotação de aula — e a IA gera perguntas infinitas sobre ele.</p>
+      <div class="brain-icon">🧠</div>
+      <h1 class="title">Quiz IA ∞</h1>
+      <p class="subtitle">Cole qualquer conteúdo — resumo, PDF copiado, anotação de aula — e a IA gera perguntas infinitas sobre ele.</p>
     </div>
 
-    <div class="form-group">
-      <div class="section-label">SEU CONTEÚDO DE ESTUDO</div>
-      <textarea id="study-content" placeholder="Cole seu texto aqui...">modelos de desenvolvimento de software, em especial o Modelo Cascata e o Modelo Espiral, além de suas principais fases e características.
+    <!-- API KEY INLINE -->
+    <span class="section-label">CHAVE DE API GEMINI</span>
+    <input type="password" id="apiKey" value="AIzaSyDTD1o-t7WxMeNslAdVc2QdCqDUsK5b4Qo" placeholder="Cole sua API Key aqui" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--md-sys-color-outline); background:var(--md-sys-color-surface-variant); color:#fff; box-sizing:border-box; margin-bottom: 10px;" />
 
-Modelo Cascata: é caracterizado por uma abordagem linear e sequencial, com etapas como comunicação, planejamento, modelagem, construção, testes e entrega, sendo eficaz para projetos com requisitos bem definidos e estáveis.
-Comunicação: etapa inicial que envolve a interação com o cliente para coletar e documentar necessidades e requisitos do projeto.
-Planejamento: inclui a definição de recursos, cronogramas, custos e identificação de riscos, guiando as fases subsequentes.
-Modelo Espiral: estrutura-se em iterações (espirais), integrando definição de objetivos, análise de riscos, desenvolvimento e planejamento constante.</textarea>
-      <div class="char-count" id="char-count">0 caracteres</div>
+    <span class="section-label">SEU CONTEÚDO DE ESTUDO</span>
+    <textarea id="materialText" placeholder="Cole o texto aqui..." oninput="updateCharCount()"></textarea>
+    <div class="char-count"><span id="charNum">0</span> caracteres</div>
+
+    <span class="section-label">TÓPICOS DETECTADOS</span>
+    <md-chip-set>
+      <md-filter-chip label="Geral" selected></md-filter-chip>
+    </md-chip-set>
+
+    <span class="section-label">NÍVEL DE DIFICULDADE</span>
+    <div class="difficulty-group">
+      <button class="diff-btn selected" onclick="setDifficulty('Fácil', this)">😋 Fácil</button>
+      <button class="diff-btn" onclick="setDifficulty('Médio', this)">🧠 Médio</button>
+      <button class="diff-btn" onclick="setDifficulty('Difícil', this)">🔥 Difícil</button>
     </div>
 
-    <div class="form-group">
-      <div class="section-label">TÓPICOS DETECTADOS</div>
-      <div class="tags-container" id="tags-container">
-        <span class="tag">Geral</span>
+    <span class="section-label">IA</span>
+    <div class="ai-card">
+      <div class="ai-info">
+        <span class="material-symbols-outlined ai-icon">auto_awesome</span>
+        <div>
+          <div style="font-weight: bold; font-size: 0.9rem;">Google Gemini</div>
+          <div style="font-size: 0.75rem; color: var(--md-sys-color-on-surface-variant);">Modelo gemini-3.6-flash</div>
+        </div>
+      </div>
+      <span class="status-badge">• ATIVO</span>
+    </div>
+    <div class="api-hint">Obtenha uma chave no <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.</div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="generateQuiz(5)">Gerar Quiz Infinito →</button>
+      <button class="btn-secondary" onclick="generateQuiz(20)">Modo Concurso: 20 questões</button>
+      <div class="btn-row">
+        <button class="btn-secondary">🔄 Revisar Erros Salvos (0)</button>
+        <button class="btn-secondary">📊 Meu Histórico</button>
       </div>
     </div>
-
-    <div class="form-group">
-      <div class="section-label">NÍVEL DE DIFICULDADE</div>
-      <div class="difficulty-grid">
-        <button class="btn-diff active" onclick="setDifficulty('Fácil', this)">😋 Fácil</button>
-        <button class="btn-diff" onclick="setDifficulty('Médio', this)">🧠 Médio</button>
-        <button class="btn-diff" onclick="setDifficulty('Difícil', this)">🔥 Difícil</button>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="section-label">GROQ API KEY</div>
-      <input type="password" value="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" id="api-key" placeholder="gsk_...">
-      <div class="api-info">
-        Chave gratuita em <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a><br>
-        Fica só no seu navegador, nunca enviada a terceiros.
-      </div>
-    </div>
-
-    <button class="btn-main btn-primary" onclick="generateQuiz(1)">Gerar Quiz Infinito →</button>
-    <button class="btn-main btn-secondary" onclick="generateQuiz(20)">Modo Concurso: 20 questões</button>
   </div>
 
-  <!-- Loading State -->
-  <div id="loading">Gerando pergunta com a IA da Groq...</div>
-
-  <!-- Renderização do Quiz -->
-  <div id="quiz-screen">
-    <div id="quiz-container"></div>
-    <button class="btn-main btn-primary" onclick="nextQuestion()" id="next-btn" style="display:none;">Próxima Questão →</button>
-    <button class="btn-main btn-secondary" onclick="resetApp()" style="margin-top:10px;">Sair / Alterar Conteúdo</button>
+  <!-- TELA DE CARREGAMENTO -->
+  <div id="loading" class="hidden" style="text-align: center; padding: 40px 0;">
+    <md-circular-progress indeterminate></md-circular-progress>
+    <p style="margin-top: 16px;">A IA está analisando seu texto e gerando o quiz...</p>
   </div>
 
+  <!-- TELA DE QUIZ -->
+  <div id="quiz-screen" class="hidden">
+    <h3 id="question-text"></h3>
+    <div id="options-container"></div>
+    <button id="next-btn" class="btn-primary hidden" style="width: 100%; margin-top: 20px;" onclick="nextQuestion()">Próxima Pergunta</button>
+  </div>
+
+  <!-- TELA DE RESULTADO -->
+  <div id="score-screen" class="hidden" style="text-align: center;">
+    <h2>Quiz Concluído!</h2>
+    <p id="final-score" style="font-size: 1.2rem; margin: 20px 0;"></p>
+    <button class="btn-primary" onclick="resetApp()">Criar Novo Quiz</button>
+  </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+  let selectedDifficulty = 'Fácil';
+  let quizData = [];
+  let currentQuestionIndex = 0;
+  let score = 0;
 
+  function updateCharCount() {
+    const text = document.getElementById('materialText').value;
+    document.getElementById('charNum').innerText = text.length;
+  }
+
+  function setDifficulty(level, btn) {
+    selectedDifficulty = level;
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  async function generateQuiz(numQuestions) {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const material = document.getElementById('materialText').value.trim();
+
+    if (!apiKey || !material) {
+      alert("Por favor, insira a chave de API e cole o conteúdo de estudo.");
+      return;
+    }
+
+    document.getElementById('setup-screen').classList.add('hidden');
+    document.getElementById('loading').classList.remove('hidden');
+
+    const prompt = `
+Com base no texto abaixo, crie um quiz de exatamente ${numQuestions} perguntas de múltipla escolha.
+Nível de dificuldade das perguntas: ${selectedDifficulty}.
+Responda APENAS em formato JSON válido, seguindo este esquema:
+[
+  {
+    "question": "Pergunta?",
+    "options": ["Opção A", "Opção B", "Opção C", "Opção D"],
+    "correctIndex": 0
+  }
+]
+
+Texto base:
+${material}
+`;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json" }
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error.message || "Erro retornado pela API do Gemini.");
+      }
+
+      if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content) {
+        throw new Error("Não foi possível gerar questões com o texto fornecido.");
+      }
+
+      const responseText = data.candidates[0].content.parts[0].text;
+      quizData = JSON.parse(responseText);
+
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+
+      showQuestion();
+
+    } catch (error) {
+      console.error(error);
+      alert("Erro: " + error.message);
+      document.getElementById('loading').classList.add('hidden');
+      document.getElementById('setup-screen').classList.remove('hidden');
+    }
+  }
+
+  function showQuestion() {
+    const currentQuestion = quizData[currentQuestionIndex];
+    document.getElementById('question-text').innerText = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+    
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    currentQuestion.options.forEach((option, index) => {
+      const div = document.createElement('div');
+      div.innerText = option;
+      div.classList.add('option-card');
+      div.onclick = () => selectOption(index, div);
+      optionsContainer.appendChild(div);
+    });
+
+    document.getElementById('next-btn').classList.add('hidden');
+  }
+
+  function selectOption(selectedIndex, selectedDiv) {
+    const currentQuestion = quizData[currentQuestionIndex];
+    const cards = document.querySelectorAll('.option-card');
+
+    cards.forEach((card, index) => {
+      card.onclick = null; // desativa cliques
+      if (index === currentQuestion.correctIndex) {
+        card.classList.add('correct');
+      }
+    });
+
+    if (selectedIndex === currentQuestion.correctIndex) {
+      score++;
+    } else {
+      selectedDiv.classList.add('incorrect');
+    }
+
+    document.getElementById('next-btn').classList.remove('hidden');
+  }
+
+  function nextQuestion() {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < quizData.length) {
+      showQuestion();
+    } else {
+      showScore();
+    }
+  }
+
+  function showScore() {
+    document.getElementById('quiz-screen').classList.add('hidden');
+    document.getElementById('score-screen').classList.remove('hidden');
+    document.getElementById('final-score').innerText = `Você acertou ${score} de ${quizData.length} perguntas (${Math.round((score/quizData.length)*100)}%)!`;
+  }
+
+  function resetApp() {
+    currentQuestionIndex = 0;
+    score = 0;
+    quizData = [];
+    document.getElementById('score-screen').classList.add('hidden');
+    document.getElementById('setup-screen').classList.remove('hidden');
+  }
+</script>
 
 </body>
 </html>
